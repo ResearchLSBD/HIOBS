@@ -1,26 +1,21 @@
 package simulator;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
-
-import simulator.Volume.VolumeStatus;
 
 public abstract class Scheduler {
 
-	public int count = 20;
 	public static enum ScheduleMethod {
-		DEFAULT, FFD
-	};
+		DEFAULT, FFD , HIOBS , THR
+	}
 
 	public static final int MAX_Q_LENGTH = 100;
 
 	ScheduleMethod method;
-	public int failCap = 10;
-	public Logger logger;
+	public static Logger logger;
+    LinkedList<VolumeRequest> requestQueue;
+    static ArrayList<Backend> candidateList;
+    public int numOfNoCandidate;
 
 	public Scheduler(ScheduleMethod _method) {
 		this.method = _method;
@@ -34,68 +29,67 @@ public abstract class Scheduler {
 	public abstract boolean isQEmpty();
 
 	public void volumeCheck(ArrayList<Backend> backendList) {
-		
-		if (count == 20 && Simulator.getTimer() >= Logger.LOG_START) {
+
+	    int simulation_time = Simulator.getTimer();
+
+		if (simulation_time >= Logger.LOG_START && simulation_time <= Logger.LOG_END) {
 			StringBuffer volSpdStringBuffer = new StringBuffer();
-			
 			StringBuffer sLAvioStringBuffer = new StringBuffer();
-			//String utlString = "";
 			StringBuffer volNumStringBuffer = new StringBuffer();
 			StringBuffer availSpdStringBuffer = new StringBuffer();
-			
+
+			volSpdStringBuffer.append(simulation_time);
+			sLAvioStringBuffer.append(simulation_time);
+			volNumStringBuffer.append(simulation_time);
+			availSpdStringBuffer.append(simulation_time);
+
 			for (Backend b : backendList) {
-				
 				b.checkVolumeStatus();
+
+				// output metric results
 				if (b.hasActiveVolume()) {
 					volSpdStringBuffer.append("," + b.getVolumeSpeed());
 				} else {
 					volSpdStringBuffer.append(",NaN");
 				}
+
 				availSpdStringBuffer.append("," + b.getAvailableVolumeSpeed());
-				if (method == ScheduleMethod.DEFAULT) {
-					sLAvioStringBuffer.append(","+b.getSLAvio());
-				}
+                sLAvioStringBuffer.append("," + b.getSLAvio());
+
 				//utlString += "," + b.getAllocatedCapacity();
 				volNumStringBuffer.append("," + b.getVolumes().size());
 			}
+
 			logger.writeToVolSpdLog(volSpdStringBuffer.toString());
-			if (method == ScheduleMethod.DEFAULT) {
-				logger.writeToSLALog(sLAvioStringBuffer.toString());
-			}
+			logger.writeToSLALog(sLAvioStringBuffer.toString());
+
 			//logger.writeToUtlLog(utlString);
 			logger.writeToVolNumLog(volNumStringBuffer.toString());
 			logger.writeToAvailSpdLog(availSpdStringBuffer.toString());
-			
-			count = 0;
+
 		} else {
 			for (Backend b : backendList) {
-				
 				b.checkVolumeStatus();
 			}
-			if (count >= 20) {
-				count = 0;
-			} else {
-				count ++;
-			}
 		}
 	}
 
-	public void migrationCheck(ArrayList<Backend> backendList) {
+//	public void migrationCheck(ArrayList<Backend> backendList) {
+//
+//		for (Backend backend : backendList) {
+//			if (!backend.getVolumes().isEmpty()) {
+//				backend.checkMigration();
+//			}
+//		}
+//	}
 
-		for (Backend backend : backendList) {
-			if (!backend.getVolumes().isEmpty()) {
-				backend.checkMigration();
-			}
-		}
-	}
-
-	public void migration(ArrayList<Backend> backendList) {
-		
-		for (Backend backend : backendList) {
-			if (!backend.getMigratingTasks().isEmpty()) {
-				backend.doMigration();
-			}
-		}
-	}
+//	public void migration(ArrayList<Backend> backendList) {
+//
+//		for (Backend backend : backendList) {
+//			if (!backend.getMigratingTasks().isEmpty()) {
+//				backend.doMigration();
+//			}
+//		}
+//	}
 
 }

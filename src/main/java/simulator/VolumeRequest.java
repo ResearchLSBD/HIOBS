@@ -28,20 +28,20 @@ public class VolumeRequest implements Comparable<VolumeRequest>{
 	}
 	
 	private int calWeight() {
-		
+
 		if (this.DIMENTION == 1) {
 			//return size * sizeCoefficient;
 			return size;
 		} else if (this.DIMENTION == 2){
 			//return size * sizeCoefficient + SLA * SLACoefficient;
-			return (int)(100 * ((double)size / Backend.MAX_CAPACITY + (double)SLA / Backend.MAX_BANDWIDTH));
+			return (int)(100 * ((double)size / new Backend().MAX_CAPACITY + (double)SLA / new Backend().MAX_BANDWIDTH));
 		} else {
 			return 0;
 		}
-		
+
 	}
 	
-	@Override
+	//@Override
 	public int compareTo(VolumeRequest arg0) {
 		if (arg0 instanceof VolumeRequest) {
 			// sort decreasing

@@ -2,7 +2,6 @@ package simulator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -146,7 +145,7 @@ public class FFDScheduler extends Scheduler {
 		//String bId = " ";
 		for (Backend backend : backendList) {
 			// check dimension 1: capacity
-			if ( backend.getAllocatedCapacity() + vr.getSize() <= Backend.MAX_CAPACITY ) {
+			if ( backend.getAllocatedCapacity() + vr.getSize() <= backend.MAX_CAPACITY ) {
 				if (VolumeRequest.DIMENTION == 2) {
 					// check dimension 2: IOPS
 					if(backend.getAvailableVolumeSpeed() >= vr.getSLA() ) {
@@ -162,24 +161,24 @@ public class FFDScheduler extends Scheduler {
 		//logger.writeToEventLog("FILTER DONE list: " + bId);
 	}
 	
-	private void filteringTh(ArrayList<Backend> backendList, VolumeRequest vr) {
-		candidateList.clear();
-		//String bId = " ";
-		for (Backend backend : backendList) {
-			// check dimension 1: capacity
-			if ( backend.getAllocatedCapacity() + vr.getSize() <= Backend.CAP_UP_TH && backend.getAllocatedCapacity() + vr.getSize() >= Backend.CAP_DOWN_TH ) {
-				if (VolumeRequest.DIMENTION == 2) {
-					// check dimension 2: IOPS
-					if(backend.getAvailableVolumeSpeed() >= vr.getSLA() && backend.getAvailableVolumeSpeed() >= Backend.IOPS_DOWN_TH && backend.getAvailableVolumeSpeed() <= Backend.IOPS_UP_TH ) {
-						candidateList.add(backend);
-					}
-				} else {
-					candidateList.add(backend);
-				}
-				//bId += Integer.toString(backend.getId()) + " ";
-			}
-		}
-	}
+//	private void filteringTh(ArrayList<Backend> backendList, VolumeRequest vr) {
+//		candidateList.clear();
+//		//String bId = " ";
+//		for (Backend backend : backendList) {
+//			// check dimension 1: capacity
+//			if ( backend.getAllocatedCapacity() + vr.getSize() <= Backend.CAP_UP_TH && backend.getAllocatedCapacity() + vr.getSize() >= Backend.CAP_DOWN_TH ) {
+//				if (VolumeRequest.DIMENTION == 2) {
+//					// check dimension 2: IOPS
+//					if(backend.getAvailableVolumeSpeed() >= vr.getSLA() && backend.getAvailableVolumeSpeed() >= Backend.IOPS_DOWN_TH && backend.getAvailableVolumeSpeed() <= Backend.IOPS_UP_TH ) {
+//						candidateList.add(backend);
+//					}
+//				} else {
+//					candidateList.add(backend);
+//				}
+//				//bId += Integer.toString(backend.getId()) + " ";
+//			}
+//		}
+//	}
 	
 	private void checkExpireRequests() {
 		Iterator<VolumeRequest> it = requestQueue.iterator();

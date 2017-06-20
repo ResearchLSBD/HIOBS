@@ -68,7 +68,7 @@ public class Volume implements Comparable<Volume>{
 		return id + " size:" + size + " expire:" + expireTime + " " + statusString;
 	}
 	
-	@Override
+//	@Override
 	public int compareTo(Volume o) {
 		if (o instanceof Volume) {
 			// sort increasing

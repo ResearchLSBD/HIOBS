@@ -65,20 +65,20 @@ public class MigrationTask {
 		return v.getSize() / out.volumeFullReadIOPS;
 	}
 	
-	public boolean selectDestNode() {
-		in = DefaultScheduler.migrationSchedule(this);
-		
-		if (in != null) {
-			in.getVolumes().offer(volume);
-			in.numOfMigrating++;
-			in.allocatedCapacity += volume.getSize();
-			in.validAllocatedCapacity += volume.getSize();
-			in.updateSpeed();
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public boolean selectDestNode() {
+//		in = DefaultScheduler.migrationSchedule(this);
+//
+//		if (in != null) {
+//			in.getVolumes().offer(volume);
+//			in.numOfMigrating++;
+//			in.allocatedCapacity += volume.getSize();
+//			in.validAllocatedCapacity += volume.getSize();
+//			in.updateSpeed();
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 	
 	public void done() {
 		out.getVolumes().remove(volume);

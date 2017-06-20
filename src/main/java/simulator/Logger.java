@@ -11,13 +11,14 @@ public class Logger {
 	public static int LOG_START;
 	public static int LOG_END;
 
+    public static String LOG_OUTPUT_DIR;
 	public static final String VOLUME_SPD_FILE= "VolumeSpeed.csv";
 	public static final String SLA_VIO_FILE = "SLAvio.csv";
 	public static final String EVENT_LOG_FILE = "eventLog.txt";
-	public static final String UTL_FILE = "utl.csv";
-	public static final String FAIL_CAP_FILE = "failCap.txt";
+	//public static final String UTL_FILE = "utl.csv";
+	//public static final String FAIL_CAP_FILE = "failCap.txt";
 	public static final String VOLUME_NUM_FILE = "VolumeNum.csv";
-	public static final String MIGRATION_FILE = "mig_event.txt";
+	//public static final String MIGRATION_FILE = "mig_event.txt";
 	public static final String AVAIL_SPD_FILE  = "availSpd.csv";
 	
 	private static boolean EN_VOLUME_SPD;
@@ -46,8 +47,9 @@ public class Logger {
 	BufferedWriter volNumwWriter;
 	BufferedWriter migEventWriter;
 	BufferedWriter availSpdWriter;
+
 	//private String name;
-	public static String numOfNodes = Integer.toString(Simulator.NODES_NUM);
+	public static String numOfNodes = Integer.toString(Simulator.NUMBER_OF_BACKENDS);
 	public String scheduling;
 	
 	private static Logger instance = new Logger();
@@ -61,10 +63,11 @@ public class Logger {
 			LOG_START = 0;
 			LOG_END = Simulator.SIMULATION_TIME;
 		} else {
-			LOG_START = 43200; //12th hour
-			LOG_END = 216000; // 60th hour
+			LOG_START = 1000; //12th hour
+			LOG_END = 9000; // 60th hour
 		}
-		
+
+        LOG_OUTPUT_DIR = "out/";
 		EN_EVENT = true;
 		EN_FAIL_CAP = false;
 		EN_SLA_VIO = true;
@@ -76,32 +79,59 @@ public class Logger {
 	}
 	
 	public void initLog(String sche) {
-		volSpdFile = new File( numOfNodes + "_" + sche + "_" + VOLUME_SPD_FILE);
-		sLAvioFile = new File( numOfNodes + "_" + sche + "_" + SLA_VIO_FILE);
-		eventLogFile = new File( numOfNodes + "_" + sche + "_" + EVENT_LOG_FILE);
-		utlFile = new File(numOfNodes + "_" + sche + "_" + UTL_FILE);
-		failCapFile = new File(numOfNodes + "_" + sche + "_" + FAIL_CAP_FILE);
-		volNumFile = new File(numOfNodes + "_" + sche + "_" + VOLUME_NUM_FILE);
-		migEventFile = new File(numOfNodes + "_" + sche + "_" + MIGRATION_FILE);
-		availSpdFile = new File(numOfNodes + "_" + sche + "_" + AVAIL_SPD_FILE);
+	    File outputDirFile = new File(Logger.LOG_OUTPUT_DIR);
+
+	    try {
+            // Create output directory
+            if (!outputDirFile.exists()) {
+                outputDirFile.mkdir();
+            }
+
+            // Create a subdirectory
+            File subdir = new File(outputDirFile, numOfNodes.toString());
+            if(!subdir.exists()) {
+                subdir.mkdir();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ERROR: Fail to create directories");
+        }
+
+		volSpdFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() + "/" + numOfNodes + "_" +
+                sche + "_" + VOLUME_SPD_FILE);
+		sLAvioFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+                sche + "_" + SLA_VIO_FILE);
+		eventLogFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+                sche + "_" + EVENT_LOG_FILE);
+//		utlFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+//                sche + "_" + UTL_FILE);
+//		failCapFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+//                sche + "_" + FAIL_CAP_FILE);
+		volNumFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+                sche + "_" + VOLUME_NUM_FILE);
+//		migEventFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+//                sche + "_" + MIGRATION_FILE);
+		availSpdFile = new File(LOG_OUTPUT_DIR + "/" + numOfNodes.toString() +  "/" + numOfNodes + "_" +
+                sche + "_" + AVAIL_SPD_FILE);
 		
 		openFiles(volSpdFile);
 		openFiles(sLAvioFile);
 		openFiles(eventLogFile);
-		openFiles(utlFile);
-		openFiles(failCapFile);
+		//openFiles(utlFile);
+		//openFiles(failCapFile);
 		openFiles(volNumFile);
-		openFiles(migEventFile);
+		//openFiles(migEventFile);
 		openFiles(availSpdFile);
 		
 		try {
 			volSpdWriter = new BufferedWriter(new FileWriter(volSpdFile));
 			slavioWriter = new BufferedWriter(new FileWriter(sLAvioFile));
 			eventLogWriter = new BufferedWriter(new FileWriter(eventLogFile));
-			utlWriter = new BufferedWriter(new FileWriter(utlFile));
-			failCapWriter = new BufferedWriter(new FileWriter(failCapFile));
+			//utlWriter = new BufferedWriter(new FileWriter(utlFile));
+			//failCapWriter = new BufferedWriter(new FileWriter(failCapFile));
 			volNumwWriter = new BufferedWriter(new FileWriter(volNumFile));
-			migEventWriter = new BufferedWriter(new FileWriter(migEventFile));
+			//migEventWriter = new BufferedWriter(new FileWriter(migEventFile));
 			availSpdWriter = new BufferedWriter(new FileWriter(availSpdFile));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,10 +205,10 @@ public class Logger {
 			volSpdWriter.close();
 			slavioWriter.close();
 			eventLogWriter.close();
-			utlWriter.close();
-			failCapWriter.close();
+			//utlWriter.close();
+			//failCapWriter.close();
 			volNumwWriter.close();
-			migEventWriter.close();
+			//migEventWriter.close();
 			availSpdWriter.close();
 		} catch (Exception e) {
 			e.printStackTrace();

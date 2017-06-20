@@ -1,0 +1,40 @@
+{
+  "SIMULATION_TIME" : 120000,
+  "NUMBER_OF_ITERATIONS": 50,
+  "SCHEDULER_LIST": [
+    "DEFAULT",
+    "BESTFIT",
+    "THR"
+  ],
+  "LOAD_GENERATOR" : {
+    "NUMBER_OF_REQUESTS": 5000,
+    "MEAN_ARRIVAL_TIME": 20,
+    "MEAN_EXPIRATION_TIME": 600,
+    "VOLUME_SIZE_LIST": [100000, 500000, 1000000],
+    "SLA_LIST" : [200, 300, 850]
+  },
+  "LOGGER" : {
+    "LOG_START" : 1000,
+    "LOG_END": 9000,
+    "LOG_OUTPUT_DIR": "scenario_3/"
+  },
+  "BACKENDS" : {
+    "NUMBER_OF_BACKEND_LIST": [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
+    "CLASSES" : [
+      {
+        "PROPORTION" : 0.4,
+        "CAPACITY" : 7200000,
+        "BANDWIDTH" : 4000
+      },
+      {
+        "PROPORTION" : 0.4,
+        "CAPACITY" : 7200000,
+        "BANDWIDTH" : 500
+      },
+      {
+        "PROPORTION" : 0.2,
+        "CAPACITY" : 7200000,
+        "BANDWIDTH" : 700
+      }
+    ]}
+}

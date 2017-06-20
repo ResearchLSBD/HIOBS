@@ -38,12 +38,10 @@ public class LoadReader {
 		}
 		
 		return new VolumeRequest(Integer.parseInt(nums[0]),		// id
-								//Integer.parseInt(nums[1] ) / 100 ,   	//arrival time
-								Integer.parseInt(nums[1]),
+								Integer.parseInt(nums[1]),		//arrival time
 								Integer.parseInt(nums[3]), 		//size
 								Integer.parseInt(nums[2]), 		//duration
-								300);							// sla = 300
-								//Integer.parseInt(nums[4]));		//sla
+								Integer.parseInt(nums[4]));		//sla
 	}
 	
 }
