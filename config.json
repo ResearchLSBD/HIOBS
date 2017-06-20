@@ -3,7 +3,7 @@
   "NUMBER_OF_ITERATIONS": 50,
   "SCHEDULER_LIST": [
     "DEFAULT",
-    "BESTFIT",
+    "HIOBS",
     "THR"
   ],
   "LOAD_GENERATOR" : {
