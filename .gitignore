@@ -1,0 +1,20 @@
+# IDE
+out
+.idea/workspace.xml
+.idea/
+openstack-cinder-simulator.iml
+
+# Output files
+*.csv
+*.csv#
+*.csv~
+*.txt
+*.txt#
+*.txt~
+cindersimulator/target/
+target/
+*.png
+
+# inputfiles
+*/input.txt
+input.txt
